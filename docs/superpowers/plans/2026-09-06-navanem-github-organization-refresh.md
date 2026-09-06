@@ -64,6 +64,7 @@ Expected: the JSON contains all eight repositories, including the untouched GTA 
 
 ```powershell
 $targets = @('opscenter','robocopygui','sysinfo-tool','payload-contact','payload-comments','superdelete','powershell-scripts')
+$headers = @{ 'User-Agent' = 'Codex-Navanem-Refresh'; 'Accept' = 'application/vnd.github+json' }
 foreach ($target in $targets) {
   try {
     Invoke-WebRequest "https://api.github.com/repos/navanem/$target" -Headers $headers -ErrorAction Stop | Out-Null
@@ -174,7 +175,7 @@ Navanem is an independent software studio. We build, maintain and share practica
 <p align="center">
   <a href="https://www.navanem.com/"><strong>Website</strong></a> ·
   <a href="https://www.navanem.com/projects"><strong>Explore projects</strong></a> ·
-  <a href="https://github.com/orgs/navanem/repositories?type=public"><strong>Repositories</strong></a> ·
+  <a href="https://github.com/orgs/navanem/repositories?q=visibility%3Apublic"><strong>Repositories</strong></a> ·
   <a href="https://www.navanem.com/contact"><strong>Contact</strong></a>
 </p>
 
@@ -256,9 +257,17 @@ Replace topics with: `open-source`, `navanem`, `typescript`, `msp`, `itsm`, `tic
 - [ ] **Step 3: Verify canonical and redirected routes**
 
 ```powershell
-Invoke-WebRequest 'https://github.com/navanem/opscenter' -MaximumRedirection 0 -ErrorAction Stop | Out-Null
-$redirect = Invoke-WebRequest 'https://github.com/navanem/navanem_OpsCenter' -MaximumRedirection 0 -SkipHttpErrorCheck
-if ($redirect.StatusCode -notin 301,302) { throw "Old OpsCenter URL did not redirect" }
+Add-Type -AssemblyName System.Net.Http
+function Get-NoRedirectStatus([string]$Uri) {
+  $handler = [System.Net.Http.HttpClientHandler]::new()
+  $handler.AllowAutoRedirect = $false
+  $client = [System.Net.Http.HttpClient]::new($handler)
+  try { return [int]($client.GetAsync($Uri).GetAwaiter().GetResult().StatusCode) }
+  finally { $client.Dispose(); $handler.Dispose() }
+}
+if ((Get-NoRedirectStatus 'https://github.com/navanem/opscenter') -ne 200) { throw 'Canonical OpsCenter URL failed' }
+$oldStatus = Get-NoRedirectStatus 'https://github.com/navanem/navanem_OpsCenter'
+if ($oldStatus -notin 301,302) { throw "Old OpsCenter URL did not redirect: $oldStatus" }
 ```
 
 Verify default branch, visibility, issues, releases, Actions, and security tabs match the baseline.
@@ -273,6 +282,10 @@ Verify default branch, visibility, issues, releases, Actions, and security tabs 
 **Interfaces:**
 - Consumes: Three existing public Windows repositories and their baseline metadata.
 - Produces: Canonical repositories, metadata, and active links for RoboCopyGUI, SysInfo Tool, and SuperDelete.
+
+- [ ] **Step 0: Read repository-local instructions**
+
+Before editing, recursively locate and read every `AGENTS.md` that applies to the files listed in this task. Stop and revise the task if repository-local instructions conflict with this plan.
 
 - [ ] **Step 1: Rename and configure RoboCopyGUI**
 
@@ -339,6 +352,10 @@ Check all three old GitHub URLs with redirects disabled and expect HTTP 301 or 3
 - Consumes: Existing package metadata and public plugin repositories.
 - Produces: Canonical GitHub URLs while preserving the published package names `@navanem/payload-contact` and `@navanem/payload-comments`.
 
+- [ ] **Step 0: Read repository-local instructions**
+
+Before editing, recursively locate and read every `AGENTS.md` that applies to `package.json`, `src/index.ts`, `README.md`, and `CHANGELOG.md`. Stop and revise the task if repository-local instructions conflict with this plan.
+
 - [ ] **Step 1: Rename and configure Payload Contact**
 
 Rename `navanem_payload_contact` to `payload-contact`.
@@ -379,6 +396,10 @@ Verify both old GitHub URLs redirect, both new repository pages resolve, package
 **Interfaces:**
 - Consumes: Existing `powershell_scripts` public repository.
 - Produces: Canonical `powershell-scripts` repository and user-facing clone instructions.
+
+- [ ] **Step 0: Read repository-local instructions**
+
+Before editing `README.md`, recursively locate and read every applicable `AGENTS.md`. Stop and revise the task if repository-local instructions conflict with this plan.
 
 - [ ] **Step 1: Rename and configure the repository**
 
@@ -472,13 +493,24 @@ Request all seven old repository URLs with redirects disabled and require 301 or
 ```powershell
 Get-Content -Raw docs/audits/2026-09-06-after.json | ConvertFrom-Json | Out-Null
 git diff --check
+git switch main
+git pull --ff-only origin main
+git switch -c docs/record-refresh-verification
 git add docs/audits/2026-09-06-after.json
 git commit -m "docs: record organization refresh verification"
-git push origin main
+git push -u origin docs/record-refresh-verification
+```
+
+Open a focused pull request, wait for required checks, and squash-merge it. Then run:
+
+```powershell
+git switch main
+git pull --ff-only origin main
+git fetch --prune
 git status --short --branch
 ```
 
-Expected: JSON parses, the diff check is silent, the push succeeds, and local `main` is clean and synchronized with `origin/main`.
+Expected: JSON parses, the diff check is silent, the PR merges, and local `main` is clean and synchronized with `origin/main`.
 
 - [ ] **Step 6: Leave the deliverable open**
 
