@@ -4,5 +4,5 @@ This public repository contains the profile displayed on the
 [Navanem GitHub organization](https://github.com/navanem).
 
 - Profile content: [`profile/README.md`](profile/README.md)
-- Website: [navanem.com](https://navanem.com/)
-- Projects: [navanem.com/en/projects](https://navanem.com/en/projects/)
+- Agency: [navanem.com](https://navanem.com/)
+- Open-source lab: [navanem.com/en/labs](https://navanem.com/en/labs/)
