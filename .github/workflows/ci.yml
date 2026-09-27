@@ -44,5 +44,5 @@ jobs:
           for path in "${required[@]}"; do
             test -s "$path" || { echo "Missing or empty: $path"; exit 1; }
           done
-          grep -Fq 'https://www.navanem.com/' profile/README.md
+          grep -Fq 'https://navanem.com/' profile/README.md
           grep -Fq 'https://github.com/navanem' profile/README.md
