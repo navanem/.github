@@ -1,14 +1,16 @@
 <div align="center">
-  <a href="https://navanem.com/">
-    <img src="./assets/navanem-header.svg" width="100%" alt="Navanem — A home for open-source applications" />
+  <a href="https://navanem.com/en/labs/">
+    <img src="./assets/navanem-logo.png" width="180" alt="Navanem" />
   </a>
+  <h1>Navanem Labs</h1>
+  <p><strong>Open applications, plugins and tools built to be understood.</strong></p>
 </div>
 
-Navanem is a creative digital agency based in Geneva and active across French-speaking Switzerland. This GitHub organization is our open-source lab: practical applications, plugins and tools that we build, maintain and share in public.
+Navanem Labs is the open-source lab of [Navanem](https://navanem.com/en/), a creative digital agency based in Geneva and active across French-speaking Switzerland. We build, maintain and share practical applications, plugins, scripts and platforms in public.
 
 <p align="center">
   <a href="https://navanem.com/en/"><strong>Agency</strong></a> ·
-  <a href="https://navanem.com/en/projects/"><strong>Explore projects</strong></a> ·
+  <a href="https://navanem.com/en/labs/"><strong>Navanem Labs</strong></a> ·
   <a href="https://github.com/orgs/navanem/repositories?q=visibility%3Apublic"><strong>Repositories</strong></a> ·
   <a href="https://navanem.com/en/contact/"><strong>Contact</strong></a>
 </p>
@@ -35,7 +37,7 @@ Navanem is a creative digital agency based in Geneva and active across French-sp
 - [**PowerShell Scripts**](https://github.com/navanem/powershell-scripts) — practical automation, troubleshooting and hardening for administrators.
 - [**SuperDelete**](https://github.com/navanem/superdelete) — a .NET command-line utility for deleting paths beyond the traditional Windows limit.
 
-Browse the complete portfolio at [navanem.com/en/projects](https://navanem.com/en/projects/).
+Explore every open-source project at [navanem.com/en/labs](https://navanem.com/en/labs/).
 
 ## Build with us
 

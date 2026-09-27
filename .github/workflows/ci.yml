@@ -31,7 +31,7 @@ jobs:
           required=(
             README.md
             profile/README.md
-            profile/assets/navanem-header.svg
+            profile/assets/navanem-logo.png
             CODE_OF_CONDUCT.md
             CONTRIBUTING.md
             SECURITY.md
@@ -45,4 +45,5 @@ jobs:
             test -s "$path" || { echo "Missing or empty: $path"; exit 1; }
           done
           grep -Fq 'https://navanem.com/' profile/README.md
+          grep -Fq 'https://navanem.com/en/labs/' profile/README.md
           grep -Fq 'https://github.com/navanem' profile/README.md
